@@ -1,0 +1,119 @@
+{
+  "name": "Chatbot Wisata Jakarta",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! Saya asisten wisata Jakarta. Mau jalan-jalan ke mana hari ini?",
+        "options": {
+          "subtitle": "Tanya apa saja tentang wisata di Jakarta",
+          "title": "Wisata Jakarta Bot"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f9484243-ce7c-4c90-817c-c55a9599b2d2",
+      "name": "When chat message received",
+      "webhookId": "ffd5247e-d61f-49f2-945e-539e6405d525"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah \"Wisata Jakarta Bot\", asisten AI yang khusus menjawab pertanyaan tentang wisata di Jakarta, Indonesia.\n\nTugasmu:\n- Memberi informasi tentang tempat wisata, kuliner khas, transportasi umum (TransJakarta, MRT, LRT, KRL), dan tips berkunjung di Jakarta.\n- Memberi rekomendasi itinerary sesuai durasi dan minat pengguna.\n\nAturan:\n1. Jawab selalu dalam Bahasa Indonesia yang ramah, jelas, dan ringkas.\n2. Jika pertanyaan di luar topik wisata Jakarta, tolak dengan sopan dan arahkan kembali ke topik wisata Jakarta.\n3. Jika tidak yakin dengan informasi seperti harga tiket atau jam buka, katakan bahwa informasi bisa berubah dan sarankan mengecek sumber resmi.\n4. Jangan mengarang fakta.\n5. Gunakan poin-poin bila memberikan beberapa rekomendasi."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "2a32d10e-40c1-4399-a555-331b99f784de",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        256
+      ],
+      "id": "35f45d94-2e4a-41f2-a7e9-ffd05e674f2e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "VXurF5DMkfYj0FeD",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        320,
+        288
+      ],
+      "id": "946109b7-b694-4e0d-96aa-7c7c153e6cc4",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c21ed49e-00cb-4492-9b9d-b450eb8bf0e7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "BEAU2Hpon9qaiiKc",
+  "tags": []
+}
